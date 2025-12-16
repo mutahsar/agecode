@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  nodes       Node[]
+  edges       Edge[]
+  settings    Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Node {
+  id        String  @id @default(cuid())
+  type      String
+  position  Json
+  data      Json
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Edge {
+  id        String  @id @default(cuid())
+  source    String
+  target    String
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model DatabaseConnection {
+  id       String  @id @default(cuid())
+  name     String
+  type     String
+  config   Json
+  isActive Boolean @default(true)
+}
