@@ -30,11 +30,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ onClose }) => {
     );
   }
 
-  const handleUpdateField = (field: string, value: any) => {
+  const handleUpdateField = (field: string, value: string | number | boolean) => {
     updateNode(selectedNode.id, { [field]: value });
   };
 
   const renderSettings = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = selectedNode.data as any;
     
     switch (selectedNode.type) {

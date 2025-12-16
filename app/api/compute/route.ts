@@ -23,16 +23,17 @@ export async function POST(request: NextRequest) {
       result,
       formula 
     });
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ 
       error: 'Computation failed', 
-      message: error.message 
+      message 
     }, { status: 500 });
   }
 }
 
 // Get available computation functions
-export async function GET(request: NextRequest) {
+export async function GET() {
   const functions = computationEngine.getAvailableFunctions();
   return NextResponse.json({ functions });
 }

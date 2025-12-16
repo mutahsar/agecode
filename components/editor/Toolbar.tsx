@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FileText, Box, Calculator, Database, Globe, Save, Download, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEditorStore } from '@/lib/stores/editorStore';
@@ -31,13 +31,18 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 }) => {
   const { addNode } = useEditorStore();
 
-  const handleAddNode = (type: string) => {
+  const handleAddNode = useCallback((type: string) => {
+    const timestamp = Date.now();
+    const randomX = Math.random() * 400;
+    const randomY = Math.random() * 400;
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newNode: CustomNode = {
-      id: `${type}_${Date.now()}`,
+      id: `${type}_${timestamp}`,
       type,
-      position: { x: Math.random() * 400, y: Math.random() * 400 },
+      position: { x: randomX, y: randomY },
       data: {
-        id: `${type}_${Date.now()}`,
+        id: `${type}_${timestamp}`,
         label: `${nodeTypes.find(n => n.type === type)?.label} جديد`,
         ...(type === 'page' && {
           name: 'صفحة جديدة',
@@ -73,7 +78,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       } as any,
     };
     addNode(newNode);
-  };
+  }, [addNode]);
 
   return (
     <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
